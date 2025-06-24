@@ -10,30 +10,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Basic models for job tracker app
-// This is a placeholder schema - actual job tracker models will be implemented with Supabase
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  name      String?
+  firstName String
+  lastName  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relations will be added when implementing actual job tracker features
+  jobApplications JobApplication[]
+  
   @@map("users")
 }
 
 model JobApplication {
   id          String   @id @default(cuid())
-  company     String
-  position    String
-  status      String   @default("applied")
-  description String?
-  salary      String?
+  jobUrl      String   
+  company     String?
+  position    String?
   location    String?
+  description String?  
+  salary      String?  
+  status        ApplicationStatus @default(APPLIED)
+  workplaceType WorkplaceType?
+  notes         String?
   appliedAt   DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("job_applications")
+}
+
+enum ApplicationStatus {
+  APPLIED
+  PHONE_SCREEN
+  INTERVIEW
+  TECHNICAL_INTERVIEW
+  FINAL_INTERVIEW
+  OFFER
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum WorkplaceType {
+  REMOTE
+  HYBRID
+  ONSITE
 }

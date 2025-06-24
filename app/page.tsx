@@ -40,33 +40,68 @@ export default async function Home() {
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition-shadow"
                 >
                   <div className="flex justify-between items-start mb-3">
-                    <div>
+                    <div className="flex-1">
                       <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                        {job.position}
+                        {job.position || "Position not specified"}
                       </h3>
                       <p className="text-lg text-gray-600 dark:text-gray-400">
-                        {job.company}
+                        {job.company || "Company not specified"}
                       </p>
+                      {job.jobUrl && (
+                        <a
+                          href={job.jobUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          View Job Posting →
+                        </a>
+                      )}
                     </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        job.status === "interview"
-                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                          : job.status === "offer"
-                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                          : job.status === "rejected"
-                          ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                          : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-                      }`}
-                    >
-                      {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
-                    </span>
+                    <div className="flex flex-col items-end gap-2">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          job.status === "INTERVIEW" ||
+                          job.status === "PHONE_SCREEN" ||
+                          job.status === "TECHNICAL_INTERVIEW" ||
+                          job.status === "FINAL_INTERVIEW"
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                            : job.status === "OFFER" ||
+                              job.status === "ACCEPTED"
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                            : job.status === "REJECTED" ||
+                              job.status === "WITHDRAWN"
+                            ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                            : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                        }`}
+                      >
+                        {job.status
+                          .replace(/_/g, " ")
+                          .toLowerCase()
+                          .replace(/\b\w/g, (l) => l.toUpperCase())}
+                      </span>
+                      {job.workplaceType && (
+                        <span className="px-2 py-1 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded text-xs font-medium">
+                          {job.workplaceType
+                            .toLowerCase()
+                            .replace(/\b\w/g, (l) => l.toUpperCase())}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {job.description && (
                     <p className="text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
                       {job.description}
                     </p>
+                  )}
+
+                  {job.notes && (
+                    <div className="mb-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-l-4 border-yellow-400">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className="font-medium">Notes:</span> {job.notes}
+                      </p>
+                    </div>
                   )}
 
                   <div className="flex flex-wrap gap-4 text-sm text-gray-500">

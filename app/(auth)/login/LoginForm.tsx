@@ -1,10 +1,10 @@
 "use client";
 
-import { useUserLogin } from "@/hooks";
+import { useAuthLogin } from "@/hooks";
 import Link from "next/link";
 
 export default function LoginForm() {
-  const { mutateAsync } = useUserLogin();
+  const { mutateAsync } = useAuthLogin();
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

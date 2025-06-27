@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
 
-type LoginData = {
+export type LoginData = {
   email: string;
   password: string;
 };
@@ -23,7 +23,7 @@ const login = async (loginData: LoginData) => {
   };
 };
 
-export const useUserLogin = (
+export const useAuthLogin = (
   options?: UseMutationOptions<unknown, unknown, LoginData>
 ) => {
   return useMutation({

@@ -1,9 +1,10 @@
 "use client";
 
-import { signup } from "../actions";
+import { useAuthSignup } from "@/hooks";
 import { useState } from "react";
 
 export default function SignupForm() {
+  const { mutateAsync } = useAuthSignup();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
@@ -26,16 +27,33 @@ export default function SignupForm() {
     );
   };
 
-  const handleSubmit = async (formData: FormData) => {
-    if (password !== confirmPassword) {
-      setPasswordsMatch(false);
-      return;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const firstName = formData.get("firstName") as string;
+    const lastName = formData.get("lastName") as string;
+    const email = formData.get("email") as string;
+    const passwordValue = formData.get("password") as string;
+
+    if (!passwordsMatch) {
+      return; // Prevent submission if passwords do not match
     }
-    return signup(formData);
+
+    try {
+      await mutateAsync({
+        fullName: `${firstName} ${lastName}`,
+        email,
+        password: passwordValue,
+      });
+      // Handle successful signup (e.g., redirect or show success message)
+    } catch (error) {
+      // Handle signup error (e.g., show error message)
+      console.error("Signup failed:", error);
+    }
   };
 
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* Name Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

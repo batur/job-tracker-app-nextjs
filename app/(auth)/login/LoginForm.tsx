@@ -2,9 +2,15 @@
 
 import { useAuthLogin } from "@/hooks";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const { mutateAsync } = useAuthLogin();
+  const router = useRouter();
+  const { mutateAsync } = useAuthLogin({
+    onSuccess: () => {
+      router.push("/dashboard"); // Redirect to dashboard on successful login
+    },
+  });
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

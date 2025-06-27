@@ -1,12 +1,31 @@
-import { login } from "../actions";
+"use client";
+
+import { useUserLogin } from "@/hooks";
 import Link from "next/link";
 
 export default function LoginForm() {
+  const { mutateAsync } = useUserLogin();
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    try {
+      await mutateAsync({ email, password });
+      // Handle successful login (e.g., redirect or show success message)
+    } catch (error) {
+      // Handle login error (e.g., show error message)
+      console.error("Login failed:", error);
+    }
+  };
+
   return (
     <>
       {/* Form */}
       <div className="bg-white dark:bg-gray-800 py-8 px-6 shadow-xl rounded-2xl border border-gray-200 dark:border-gray-700">
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div>
             <label
               htmlFor="email"
@@ -105,7 +124,7 @@ export default function LoginForm() {
 
           <div>
             <button
-              formAction={login}
+              type="submit"
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-[1.02] shadow-lg"
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">

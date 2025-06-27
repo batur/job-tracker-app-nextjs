@@ -1,15 +1,7 @@
-import { prisma } from "@/lib/prisma";
-
 export default async function Home() {
-  // Fetch job applications from database
-  const jobs = await prisma.jobApplication.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 10, // Show only the latest 10 jobs
-  });
-
   return (
     <div className="min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="max-w-6xl mx-auto">
+      {/* <main className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Job Tracker</h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -133,7 +125,7 @@ export default async function Home() {
             Database integration will be switched to Supabase in the next stage
           </p>
         </div>
-      </main>
+      </main> */}
     </div>
   );
 }

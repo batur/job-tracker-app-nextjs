@@ -1,10 +1,16 @@
 "use client";
 
 import { useAuthSignup } from "@/hooks";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignupForm() {
-  const { mutateAsync } = useAuthSignup();
+  const router = useRouter();
+  const { mutateAsync } = useAuthSignup({
+    onSuccess: () => {
+      router.push("/login");
+    },
+  });
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
